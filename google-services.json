@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "789599391271",
-    "firebase_url": "https://t3st-a7cd3.firebaseio.com",
-    "project_id": "t3st-a7cd3",
-    "storage_bucket": "t3st-a7cd3.appspot.com"
+    "project_number": "326469971389",
+    "firebase_url": "https://parkinlot-6969.firebaseio.com",
+    "project_id": "parkinlot-6969",
+    "storage_bucket": "parkinlot-6969.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:789599391271:android:89ce96813617ebfa",
+        "mobilesdk_app_id": "1:326469971389:android:89ce96813617ebfa",
         "android_client_info": {
           "package_name": "com.pwh.push"
         }
       },
       "oauth_client": [
         {
-          "client_id": "789599391271-d2tmvkd55vnrc1obchuihters8jbm7lj.apps.googleusercontent.com",
+          "client_id": "326469971389-fnvhkphmpcpujctp4dvm1r7q74n6b65q.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBsaDDOoUwzAtK1DEsTZxHXT-23bwOR258"
+          "current_key": "AIzaSyCe7Q92UK9Cc1QLSXSLIaS12-vGhEXtb0M"
         }
       ],
       "services": {

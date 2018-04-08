@@ -15,6 +15,7 @@ export class HomePage {
   }
 
   token;
+  notif;
   
 
   ionViewDidLoad() {
@@ -29,9 +30,9 @@ export class HomePage {
 
     this.fcm.onNotification().subscribe(data => {
       if (data.wasTapped) {
-        alert("Received in background");
+        alert("Received in background" + data);
       } else {
-        alert("Received in foreground");
+        alert("Received in foreground" + data);
       };
     });
 
@@ -45,5 +46,9 @@ export class HomePage {
   sendNotif(){
     this.notifProvider.sendRequest(this.token);
   }
+
+  // ionViewDidLeave() {
+  //   this.notif.unsubscribe();
+  // }
 
 }

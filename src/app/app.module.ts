@@ -14,11 +14,14 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { NotifProvider } from '../providers/notif/notif';
+import { LoginPage } from '../pages/login/login';
+import { AuthProvider } from '../providers/auth/auth';
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    LoginPage
   ],
   imports: [
     BrowserModule,
@@ -32,14 +35,16 @@ import { NotifProvider } from '../providers/notif/notif';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+    LoginPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     FCM,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    NotifProvider
+    NotifProvider,
+    AuthProvider
   ]
 })
 export class AppModule {}
