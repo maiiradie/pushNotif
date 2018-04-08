@@ -41,9 +41,4 @@ export class NotifProvider {
       }).subscribe();
   }
 
-
-
-
-
-
 }
