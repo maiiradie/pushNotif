@@ -30,13 +30,14 @@ export class HomePage {
         }).then( () => {
           this.token = token;
         });
+      alert("this is get token");
     });
 
     this.fcm.onNotification().subscribe(data => {
       if (data.wasTapped) {
-        alert("Received in background" + data);
+        alert("Received in background" + JSON.stringify(data));
       } else {
-        alert("Received in foreground" + data);
+        alert("Received in foreground" + JSON.stringify(data));
       };
     });
 
@@ -44,6 +45,7 @@ export class HomePage {
       this.afdb.object('tokens/' + this.uid).update({
         token: token
       });
+      alert("this is on token refresh");
     });
   }
 
