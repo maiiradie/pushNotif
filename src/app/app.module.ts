@@ -4,6 +4,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { FCM } from '@ionic-native/fcm';
+import { HttpClientModule } from '@angular/common/http';
 
 
 import { MyApp } from './app.component';
@@ -26,7 +27,7 @@ import { NotifProvider } from '../providers/notif/notif';
     AngularFireModule,
     AngularFireAuthModule,
     AngularFireDatabaseModule,
-    
+    HttpClientModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [

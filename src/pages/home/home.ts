@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { AngularFireDatabase } from 'angularfire2/database';
-
+import { NotifProvider } from '../../providers/notif/notif';
 import firebase from 'firebase';
-
-declare var FCMPlugin;
+import { FCM } from '@ionic-native/fcm';
 
 @Component({
   selector: 'page-home',
@@ -12,55 +11,39 @@ declare var FCMPlugin;
 })
 
 export class HomePage {
-  firestore = firebase.database().ref('/pushtokens');
-  firemsg = firebase.database().ref('/messages');
-  constructor(public navCtrl: NavController, public afd: AngularFireDatabase) {
-    this.tokensetup().then((token) => {
-      this.storetoken(token);
-    })
+  constructor(private fcm:FCM,private notifProvider:NotifProvider,public navCtrl: NavController, public afdb: AngularFireDatabase) {
   }
 
+  token;
+  
+
   ionViewDidLoad() {
-    FCMPlugin.onNotification(function (data) {
+
+    this.fcm.getToken().then(token => {
+        this.afdb.object('tokens').set({
+          token:token
+        }).then( () => {
+          this.token = token;
+        });
+    });
+
+    this.fcm.onNotification().subscribe(data => {
       if (data.wasTapped) {
-        //Notification was received on device tray and tapped by the user.
-        alert(JSON.stringify(data));
+        alert("Received in background");
       } else {
-        //Notification was received in foreground. Maybe the user needs to be notified.
-        alert(JSON.stringify(data));
-      }
+        alert("Received in foreground");
+      };
+    });
+
+    this.fcm.onTokenRefresh().subscribe(token => {
+      this.afdb.object('tokens').update({
+        token: token
+      });
     });
   }
 
-  sendNotif() {
-    console.log('wasap world');
+  sendNotif(){
+    this.notifProvider.sendRequest(this.token);
   }
 
-  tokensetup() {
-    var promise = new Promise((resolve, reject) => {
-      FCMPlugin.getToken(function (token) {
-        resolve(token);
-      }, (err) => {
-        reject(err);
-      });
-    })
-    return promise;
-  }
-
-  storetoken(t) {
-    this.afd.list(this.firestore).push({
-      // uid: firebase.auth().currentUser.uid,
-      devtoken: t
-
-    }).then(() => {
-      alert('Token stored');
-    })
-
-    this.afd.list(this.firemsg).push({
-      // sendername: firebase.auth().currentUser.displayName,
-      message: 'hello'
-    }).then(() => {
-      alert('Message stored');
-    })
-  }
 }
