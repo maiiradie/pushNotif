@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { NotifProvider } from '../../providers/notif/notif';
 import { AuthProvider} from '../../providers/auth/auth';
 // import firebase from 'firebase';
 import { FCM } from '@ionic-native/fcm';
 import { LoginPage } from '../login/login';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'page-home',
@@ -19,12 +20,21 @@ export class HomePage {
   token;
   notif;
 
-  users = [];
+  users:Observable<any[]>;
 
   constructor(private afAuth:AngularFireAuth,private authProvider:AuthProvider,private fcm:FCM,private notifProvider:NotifProvider,public navCtrl: NavController, public afdb: AngularFireDatabase) {
     this.uid = this.afAuth.auth.currentUser.uid;
-    this.getUsers();
   }
+
+  ngOnInit(){
+    this.users = this.getUsers();
+  
+  }
+
+  ngOnDestroy(){
+    console.log('this is ngondestory');
+  }
+
 
   ionViewDidLoad() {
     // this.fcm.getToken().then(token => {
@@ -53,6 +63,7 @@ export class HomePage {
   }
 
   sendNotif(){
+    //unsubscribe POST here
     this.notifProvider.sendRequest(this.token);
   }
 
@@ -62,23 +73,31 @@ export class HomePage {
       this.navCtrl.setRoot(LoginPage);
     });
   }
-
   getUsers(){
-    this.afdb.list('profiles').snapshotChanges()
-    .subscribe( users => {
-      console.log(users);
-      this.users = users;
-    });
+    return this.afdb.list<any>('profiles').snapshotChanges();
+    
+    //OR
+    //BY USING SUBSCRIPTION 
+    //Note* Needs to be unsubscribed onDestroy
+
+    // users = [];
+    //  this.getUsers();
+    // subscription;
+    
+
+    // this.subscription = this.afdb.list<any>('profiles').snapshotChanges()
+    // .subscribe( users => {
+    //     this.users = users;
+    // });
+
+    // ngOnDestroy(){
+    //   this.subscription.unsubscribe();
+    // }
+
   }
 
   userSelected(user){
     console.log(user);
   }
-
-
-
-  // ionViewDidLeave() {
-  //   this.notif.unsubscribe();
-  // }
-
+  
 }
