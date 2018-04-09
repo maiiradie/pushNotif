@@ -19,8 +19,11 @@ export class HomePage {
   token;
   notif;
 
+  users = [];
+
   constructor(private afAuth:AngularFireAuth,private authProvider:AuthProvider,private fcm:FCM,private notifProvider:NotifProvider,public navCtrl: NavController, public afdb: AngularFireDatabase) {
     this.uid = this.afAuth.auth.currentUser.uid;
+    this.getUsers();
   }
 
   ionViewDidLoad() {
@@ -61,8 +64,18 @@ export class HomePage {
   }
 
   getUsers(){
-    
+    this.afdb.list('profiles').snapshotChanges()
+    .subscribe( users => {
+      console.log(users);
+      this.users = users;
+    });
   }
+
+  userSelected(user){
+    console.log(user);
+  }
+
+
 
   // ionViewDidLeave() {
   //   this.notif.unsubscribe();
