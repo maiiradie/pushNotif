@@ -36,4 +36,8 @@ export class AuthProvider {
     return this.afAuth.auth.signOut();
   }
 
+  registerUser(user){
+    return this.afAuth.auth.createUserWithEmailAndPassword(user.email,user.password);
+  }
+
 }
