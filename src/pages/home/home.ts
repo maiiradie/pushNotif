@@ -17,8 +17,9 @@ import { Observable } from 'rxjs/Observable';
 export class HomePage {
 
   uid;
-  token;
   notif;
+  //current logged in user token
+  token;
 
   users:Observable<any[]>;
 
@@ -33,15 +34,16 @@ export class HomePage {
   }
 
   ngOnDestroy(){
-    console.log('this is ngondestory');
+    console.log('this is ngondestory / unsubscribe here');
   }
-
 
   ionViewDidLoad() {
     this.fcm.getToken().then(token => {
-        this.afdb.object('tokens/' + this.uid).set({
+        this.afdb.object('profiles/' + this.uid).update({
           token:token
-        }).then( () => {
+        })
+        //assign current token
+        .then( () => {
           this.token = token;
         });
       alert("this is get token");
@@ -64,6 +66,8 @@ export class HomePage {
     });
   }
 
+
+
   sendNotif(){
     //unsubscribe POST here
     this.notifProvider.sendRequest(this.token);
@@ -75,28 +79,6 @@ export class HomePage {
       this.navCtrl.setRoot(LoginPage);
     });
   }
-  getUsers(){
-    return this.afdb.list<any>('profiles').snapshotChanges();
-    
-    //OR
-    //BY USING SUBSCRIPTION 
-    //Note* Needs to be unsubscribed onDestroy
-
-    // users = [];
-    //  this.getUsers();
-    // subscription;
-    
-
-    // this.subscription = this.afdb.list<any>('profiles').snapshotChanges()
-    // .subscribe( users => {
-    //     this.users = users;
-    // });
-
-    // ngOnDestroy(){
-    //   this.subscription.unsubscribe();
-    // }
-
-  }
 
   userSelected(user){
       let actionSheet = this.actionSheetCtrl.create({
@@ -105,8 +87,8 @@ export class HomePage {
           {
             text: 'Request',
             handler: () => {
-              // console.log('Archive clicked');
-              console.log(JSON.stringify(user));
+              alert(user.token);
+              this.notifProvider.sendRequest(user.token);
             }
           },
           {
@@ -121,5 +103,27 @@ export class HomePage {
 
       actionSheet.present();
   }
-  
+
+  getUsers() {
+    return this.afdb.list<any>('profiles').snapshotChanges();
+
+    //OR
+    //BY USING SUBSCRIPTION 
+    //Note* Needs to be unsubscribed onDestroy
+
+    // users = [];
+    //  this.getUsers();
+    // subscription;
+
+
+    // this.subscription = this.afdb.list<any>('profiles').snapshotChanges()
+    // .subscribe( users => {
+    //     this.users = users;
+    // });
+
+    // ngOnDestroy(){
+    //   this.subscription.unsubscribe();
+    // }
+
+  }
 }
