@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, ActionSheetController } from 'ionic-angular';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { NotifProvider } from '../../providers/notif/notif';
@@ -22,7 +22,8 @@ export class HomePage {
 
   users:Observable<any[]>;
 
-  constructor(private afAuth:AngularFireAuth,private authProvider:AuthProvider,private fcm:FCM,private notifProvider:NotifProvider,public navCtrl: NavController, public afdb: AngularFireDatabase) {
+  constructor(public actionSheetCtrl: ActionSheetController, private afAuth:AngularFireAuth,private authProvider:AuthProvider,private fcm:FCM,private notifProvider:NotifProvider,public navCtrl: NavController, public afdb: AngularFireDatabase) {
+    //?? where to put //working
     this.uid = this.afAuth.auth.currentUser.uid;
   }
 
@@ -37,29 +38,30 @@ export class HomePage {
 
 
   ionViewDidLoad() {
-    // this.fcm.getToken().then(token => {
-    //     this.afdb.object('tokens/' + this.uid).set({
-    //       token:token
-    //     }).then( () => {
-    //       this.token = token;
-    //     });
-    //   alert("this is get token");
-    // });
+    this.fcm.getToken().then(token => {
+        this.afdb.object('tokens/' + this.uid).set({
+          token:token
+        }).then( () => {
+          this.token = token;
+        });
+      alert("this is get token");
+    });
 
-    // this.fcm.onNotification().subscribe(data => {
-    //   if (data.wasTapped) {
-    //     alert("Received in background" + JSON.stringify(data));
-    //   } else {
-    //     alert("Received in foreground" + JSON.stringify(data));
-    //   };
-    // });
-
-    // this.fcm.onTokenRefresh().subscribe(token => {
-    //   this.afdb.object('tokens/' + this.uid).update({
-    //     token: token
-    //   });
-    //   alert("this is on token refresh");
-    // });
+    this.fcm.onNotification().subscribe(data => {
+      if (data.wasTapped) {
+        alert("Received in background" + JSON.stringify(data));
+      } else {
+        alert("Received in foreground" + JSON.stringify(data));
+      };
+    });
+    
+    // trigger when?
+    this.fcm.onTokenRefresh().subscribe(token => {
+      this.afdb.object('tokens/' + this.uid).update({
+        token: token
+      });
+      alert("this is on token refresh");
+    });
   }
 
   sendNotif(){
@@ -97,7 +99,27 @@ export class HomePage {
   }
 
   userSelected(user){
-    console.log(user);
+      let actionSheet = this.actionSheetCtrl.create({
+        title: user.payload.val().email,
+        buttons: [
+          {
+            text: 'Request',
+            handler: () => {
+              // console.log('Archive clicked');
+              console.log(JSON.stringify(user));
+            }
+          },
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: () => {
+              console.log('Cancel clicked');
+            }
+          }
+        ]
+      });
+
+      actionSheet.present();
   }
   
 }
