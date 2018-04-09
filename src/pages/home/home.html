@@ -7,16 +7,10 @@
 </ion-header>
 
 <ion-content padding>
-  <button ion-button icon-right (click)="sendNotif()">
-    Right Icon
-    <ion-icon name="home"></ion-icon>
-  </button>
-
   <button ion-button icon-right (click)="onLogout()">
     Logout
   </button>
 
-<!-- (click)="itemSelected(item)" -->
   <ion-list>
     <button ion-item *ngFor="let user of users | async"  (click)="userSelected(user)">
       {{ user?.payload.val().email }}

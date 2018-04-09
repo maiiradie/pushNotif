@@ -18,9 +18,6 @@ export class HomePage {
 
   uid;
   notif;
-  //current logged in user token
-  token;
-
   users:Observable<any[]>;
 
   constructor(public actionSheetCtrl: ActionSheetController, private afAuth:AngularFireAuth,private authProvider:AuthProvider,private fcm:FCM,private notifProvider:NotifProvider,public navCtrl: NavController, public afdb: AngularFireDatabase) {
@@ -41,10 +38,6 @@ export class HomePage {
     this.fcm.getToken().then(token => {
         this.afdb.object('profiles/' + this.uid).update({
           token:token
-        })
-        //assign current token
-        .then( () => {
-          this.token = token;
         });
       alert("this is get token");
     });
@@ -59,18 +52,11 @@ export class HomePage {
     
     // trigger when?
     this.fcm.onTokenRefresh().subscribe(token => {
-      this.afdb.object('tokens/' + this.uid).update({
+      this.afdb.object('profiles/' + this.uid).update({
         token: token
       });
       alert("this is on token refresh");
     });
-  }
-
-
-
-  sendNotif(){
-    //unsubscribe POST here
-    this.notifProvider.sendRequest(this.token);
   }
 
   onLogout(){
@@ -81,14 +67,14 @@ export class HomePage {
   }
 
   userSelected(user){
+
       let actionSheet = this.actionSheetCtrl.create({
         title: user.payload.val().email,
         buttons: [
           {
             text: 'Request',
             handler: () => {
-              alert(user.token);
-              this.notifProvider.sendRequest(user.token);
+              this.notifProvider.sendRequest(user.payload.val().token);
             }
           },
           {
