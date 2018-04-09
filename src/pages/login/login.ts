@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { AuthProvider  } from "../../providers/auth/auth";
+import { RegisterPage } from '../register/register';
 /**
  * Generated class for the LoginPage page.
  *
@@ -31,7 +32,10 @@ export class LoginPage {
     .then( () => {
         this.navCtrl.setRoot(HomePage);  
     });
-    
+  }
+
+  onRegister(){
+    this.navCtrl.push(RegisterPage);
   }
 
 

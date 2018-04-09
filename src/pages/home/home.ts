@@ -24,29 +24,29 @@ export class HomePage {
   }
 
   ionViewDidLoad() {
-    this.fcm.getToken().then(token => {
-        this.afdb.object('tokens/' + this.uid).set({
-          token:token
-        }).then( () => {
-          this.token = token;
-        });
-      alert("this is get token");
-    });
+    // this.fcm.getToken().then(token => {
+    //     this.afdb.object('tokens/' + this.uid).set({
+    //       token:token
+    //     }).then( () => {
+    //       this.token = token;
+    //     });
+    //   alert("this is get token");
+    // });
 
-    this.fcm.onNotification().subscribe(data => {
-      if (data.wasTapped) {
-        alert("Received in background" + JSON.stringify(data));
-      } else {
-        alert("Received in foreground" + JSON.stringify(data));
-      };
-    });
+    // this.fcm.onNotification().subscribe(data => {
+    //   if (data.wasTapped) {
+    //     alert("Received in background" + JSON.stringify(data));
+    //   } else {
+    //     alert("Received in foreground" + JSON.stringify(data));
+    //   };
+    // });
 
-    this.fcm.onTokenRefresh().subscribe(token => {
-      this.afdb.object('tokens/' + this.uid).update({
-        token: token
-      });
-      alert("this is on token refresh");
-    });
+    // this.fcm.onTokenRefresh().subscribe(token => {
+    //   this.afdb.object('tokens/' + this.uid).update({
+    //     token: token
+    //   });
+    //   alert("this is on token refresh");
+    // });
   }
 
   sendNotif(){
@@ -58,6 +58,10 @@ export class HomePage {
     .then( () => {
       this.navCtrl.setRoot(LoginPage);
     });
+  }
+
+  getUsers(){
+    
   }
 
   // ionViewDidLeave() {
