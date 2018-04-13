@@ -26,9 +26,8 @@ export class NotifProvider {
           "icon": "fcm_push_icon"
         },
         "data": {
-          "coID": "",
-          "hoToken": "",
-          "hoID": ""
+          "param1": "",
+          "param2": "",
         },
         "to": token,
         "priority": "high",
@@ -38,13 +37,8 @@ export class NotifProvider {
       let options = new HttpHeaders().set('Content-Type', 'application/json');
 
       return this.http.post("https://fcm.googleapis.com/fcm/send", body, {
-        headers: options.set('Authorization', 'key=AAAAt9fKjic:APA91bElNAf1Tei6PzVmS1ki1rwEnJANXwG5MhNpDwrjpnsUyOOYMc_L7Z16rm1yLjjFb5-TXLGwHWR7RsZzwe5bmxLwcw-OvWpA2HSn7gV5frUa0V03jbQbT6I_JpB-deO52m7PrAl-'),
+        headers: options.set('Authorization', 'key=AAAATAMgbb0:APA91bGzTj3yGmzzG2vwGruWKqP2CMxsR6Q0DbShzYCSXF8GVLWHbWgziQei94RN_fPoyp1DfIsfnEXLs8noN9nsuJ_RmaZtgD33QhdtIcoBrII4JHYvtZCJUbBpNp6UItTumab47e9P'),
       }).subscribe();
   }
-
-
-
-
-
 
 }
